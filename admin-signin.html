@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Login - R.H. Sapat College</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        html, body {
+            height: 100%;
+            background: #e0e7ff;
+        }
+
+        .app-container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        /* HEADER - Dark glass */
+        .header {
+            background: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(12px);
+            padding: 15px;
+            text-align: center;
+            border-bottom: 1px solid rgba(59,130,246,0.2);
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .header h1 {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .header p {
+            font-size: 13px;
+            color: #94a3b8;
+            margin-top: 4px;
+        }
+
+        /* MAIN */
+        .main-content {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        /* LOGIN CARD - Dark glass - SINGLE CARD */
+        .login-card {
+            width: 100%;
+            max-width: 400px;
+            background: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(18px);
+            padding: 35px 30px;
+            border-radius: 24px;
+            border: 1px solid rgba(255,255,255,0.08);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.45);
+        }
+
+        .card-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .card-header h2 {
+            color: white;
+            font-size: 28px;
+            font-weight: 600;
+        }
+
+        .card-header p {
+            font-size: 13px;
+            color: #94a3b8;
+            margin-top: 4px;
+        }
+
+        .card-header hr {
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+            border: none;
+            margin: 12px auto;
+            border-radius: 2px;
+        }
+
+        /* ALERTS */
+        .alert {
+            padding: 12px 16px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            backdrop-filter: blur(4px);
+        }
+
+        .alert-success {
+            background: rgba(34, 197, 94, 0.15);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            color: #4ade80;
+        }
+
+        .alert-error {
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #f87171;
+        }
+
+        /* FORM */
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            font-size: 12px;
+            font-weight: 500;
+            color: #94a3b8;
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 14px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.08);
+            background: rgba(255,255,255,0.03);
+            color: white;
+            font-size: 14px;
+            transition: all 0.25s ease;
+        }
+
+        .form-group input::placeholder {
+            color: rgba(255,255,255,0.4);
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: rgba(59,130,246,0.5);
+            background: rgba(255,255,255,0.06);
+            box-shadow: 0 0 0 2px rgba(59,130,246,0.15);
+        }
+
+        /* BUTTON */
+        .blue-btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            margin-top: 8px;
+        }
+
+        .blue-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 5px 15px rgba(59,130,246,0.3);
+        }
+
+        .blue-btn:active {
+            transform: scale(0.98);
+        }
+
+        /* LINKS */
+        .links {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 18px;
+        }
+
+        .links a {
+            font-size: 12px;
+            text-decoration: none;
+            color: #94a3b8;
+            transition: color 0.2s;
+        }
+
+        .links a:hover {
+            color: #60a5fa;
+        }
+
+        .back-link {
+            text-align: center;
+            margin-top: 16px;
+        }
+
+        .back-link a {
+            font-size: 12px;
+            text-decoration: none;
+            color: #64748b;
+            transition: color 0.2s;
+        }
+
+        .back-link a:hover {
+            color: #60a5fa;
+        }
+
+        /* FOOTER */
+        .footer {
+            background: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(12px);
+            color: #64748b;
+            text-align: center;
+            padding: 12px;
+            font-size: 11px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            flex-shrink: 0;
+        }
+
+        @media (max-width: 480px) {
+            .login-card {
+                padding: 25px 20px;
+            }
+            .card-header h2 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="app-container">
+
+    <div class="header">
+        <h1>Gokhale Education Society's
+R. H. Sapat College of Engineering, Management Studies And Research, Nashik-422005</h1>
+        <p>Teacher Login Portal</p>
+    </div>
+
+    <div class="main-content">
+        <div class="login-card">
+
+            <div class="card-header">
+                <h2>Welcome Back</h2>
+                <p>Faculty Access Portal</p>
+                <hr>
+            </div>
+
+            <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+            <div th:if="${error}" class="alert alert-error" th:text="${error}"></div>
+
+            <form action="/auth/signin" method="post">
+                <div class="form-group">
+                    <label>College Email</label>
+                    <input type="email" name="email" placeholder="teacher@rhsapat.edu.in" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" name="password" placeholder="Enter your password" required>
+                </div>
+
+                <button type="submit" class="blue-btn">Sign In</button>
+            </form>
+
+            <div class="links">
+                <a href="/auth/forgot-password">Forgot Password?</a>
+                <a href="/auth/signup">Create Account</a>
+            </div>
+
+            <div class="back-link">
+                <a href="/">← Back to Main Portal</a>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="footer">
+        © Gokhale Education Society's
+R. H. Sapat College of Engineering, Management Studies And Research, Nashik-422005 | Teacher Login Portal
+    </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Registration - R.H. Sapat College</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background: #e0e7ff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .register-container {
+            width: 100%;
+            max-width: 500px;
+        }
+        .register-card {
+            background: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(18px);
+            border-radius: 24px;
+            padding: 35px 30px;
+            border: 1px solid rgba(255,255,255,0.08);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.45);
+        }
+        .logo {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        .logo h1 {
+            color: white;
+            font-size: 24px;
+            font-weight: 600;
+        }
+        .logo p {
+            color: #94a3b8;
+            font-size: 14px;
+            margin-top: 8px;
+        }
+        .logo hr {
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+            margin: 15px auto;
+            border: none;
+            border-radius: 2px;
+        }
+        .alert {
+            padding: 12px 16px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            font-size: 13px;
+        }
+        .alert-error {
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #f87171;
+        }
+        .form-group {
+            margin-bottom: 16px;
+        }
+        .form-group label {
+            display: block;
+            color: #94a3b8;
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 6px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 12px;
+            background: rgba(255,255,255,0.03);
+            color: white;
+            font-size: 14px;
+            transition: all 0.25s;
+        }
+        .form-group input:focus {
+            outline: none;
+            border-color: rgba(59,130,246,0.5);
+            background: rgba(255,255,255,0.06);
+            box-shadow: 0 0 0 2px rgba(59,130,246,0.15);
+        }
+        .form-group input::placeholder {
+            color: rgba(255,255,255,0.4);
+        }
+        .password-hint {
+            font-size: 11px;
+            margin-top: 5px;
+            color: #64748b;
+        }
+        .register-btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s;
+            margin-top: 15px;
+        }
+        .register-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 5px 15px rgba(59,130,246,0.3);
+        }
+        .login-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .login-link a {
+            color: #94a3b8;
+            text-decoration: none;
+            font-size: 13px;
+        }
+        .login-link a:hover {
+            color: #60a5fa;
+        }
+        .back-link {
+            text-align: center;
+            margin-top: 15px;
+        }
+        .back-link a {
+            color: #64748b;
+            text-decoration: none;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="register-container">
+        <div class="register-card">
+            <div class="logo">
+                <h1>Student Registration</h1>
+                <p>Create your account</p>
+                <hr>
+            </div>
+            <div th:if="${error}" class="alert alert-error" th:text="${error}"></div>
+            <form action="/student/signup" method="post" onsubmit="return validateForm()">
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" name="fullName" id="fullName" placeholder="Enter your full name" required>
+                </div>
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" name="email" id="email" placeholder="your@email.com" required>
+                </div>
+                <div class="form-group">
+                    <label>Mobile Number</label>
+                    <input type="tel" name="mobile" id="mobile" placeholder="10-digit mobile number" maxlength="10" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" name="password" id="password" placeholder="Min 6 characters" required>
+                </div>
+                <div class="form-group">
+                    <label>Confirm Password</label>
+                    <input type="password" name="confirmPassword" id="confirmPassword" placeholder="Re-enter password" required>
+                </div>
+                <div class="password-hint" id="passwordMatchMsg"></div>
+                <button type="submit" class="register-btn">Create Account</button>
+            </form>
+            <div class="login-link">
+                Already have an account? <a href="/student/signin">Sign in</a>
+            </div>
+            <div class="back-link">
+                <a href="/">← Back to Welcome</a>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.getElementById('mobile').addEventListener('input', function() {
+            this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10);
+        });
+        document.getElementById('confirmPassword').addEventListener('input', function() {
+            let password = document.getElementById('password').value;
+            let confirm = this.value;
+            let msg = document.getElementById('passwordMatchMsg');
+            if (confirm.length > 0) {
+                if (password === confirm) {
+                    msg.innerHTML = '✓ Passwords match';
+                    msg.style.color = '#4ade80';
+                } else {
+                    msg.innerHTML = '✗ Passwords do not match';
+                    msg.style.color = '#f87171';
+                }
+            } else {
+                msg.innerHTML = '';
+            }
+        });
+        function validateForm() {
+            let password = document.getElementById('password').value;
+            let confirm = document.getElementById('confirmPassword').value;
+            let mobile = document.getElementById('mobile').value;
+            let email = document.getElementById('email').value;
+            if (password.length < 6) {
+                alert('Password must be at least 6 characters!');
+                return false;
+            }
+            if (password !== confirm) {
+                alert('Passwords do not match!');
+                return false;
+            }
+            if (mobile.length !== 10) {
+                alert('Please enter a valid 10-digit mobile number!');
+                return false;
+            }
+            if (!email.includes('@') || !email.includes('.')) {
+                alert('Please enter a valid email address!');
+                return false;
+            }
+            return true;
+        }
+    </script>
+</body>
+</html>

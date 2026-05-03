@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Portal - R.H. Sapat College</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background: radial-gradient(circle at 30% 20%, #1e293b, #020617 70%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .portal-container {
+            width: 100%;
+            max-width: 500px;
+            padding: 20px;
+        }
+        .portal-card {
+            background: rgba(255, 255, 255, 0.035);
+            backdrop-filter: blur(18px);
+            border-radius: 24px;
+            padding: 40px 35px;
+            border: 1px solid rgba(255,255,255,0.08);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.45);
+            text-align: center;
+        }
+        .logo {
+            margin-bottom: 30px;
+        }
+        .logo h1 {
+            color: white;
+            font-size: 28px;
+            font-weight: 600;
+        }
+        .logo p {
+            color: #94a3b8;
+            font-size: 14px;
+            margin-top: 8px;
+        }
+        .logo hr {
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+            margin: 15px auto;
+            border: none;
+            border-radius: 2px;
+        }
+        .btn-group {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .login-btn {
+            padding: 14px;
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: block;
+            text-align: center;
+        }
+        .register-btn {
+            padding: 14px;
+            background: transparent;
+            border: 1px solid rgba(59,130,246,0.5);
+            color: white;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: block;
+            text-align: center;
+        }
+        .register-btn:hover {
+            background: rgba(59,130,246,0.1);
+        }
+        .login-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 5px 15px rgba(59,130,246,0.3);
+        }
+        .back-link {
+            margin-top: 20px;
+        }
+        .back-link a {
+            color: #64748b;
+            text-decoration: none;
+            font-size: 13px;
+        }
+        .back-link a:hover {
+            color: #60a5fa;
+        }
+    </style>
+</head>
+<body>
+    <div class="portal-container">
+        <div class="portal-card">
+            <div class="logo">
+                <h1>Student Portal</h1>
+                <p>Welcome to PG Admission Portal</p>
+                <hr>
+            </div>
+            <div class="btn-group">
+                <a href="/student/signin" class="login-btn">Sign In</a>
+                <a href="/student/signup" class="register-btn">Create New Account</a>
+            </div>
+            <div class="back-link">
+                <a href="/">← Back to Main</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

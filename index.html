@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>PG Admission Portal - R.H. Sapat College</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        /* ========== CHATBOT STYLES ========== */
+        #chatbotApp {
+            display: flex;
+            width: 100vw;
+            height: 100vh;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+            background: linear-gradient(135deg, #e8ecf1 0%, #d1d9e6 100%);
+        }
+
+        .app-container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1a2a3a 0%, #1e3c72 100%);
+            padding: 5px 15px;
+            border-bottom: 2px solid #4a90e2;
+            flex-shrink: 0;
+        }
+
+        .header-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo-left {
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
+        }
+
+        .logo-right {
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
+        }
+
+        .header-text {
+            text-align: center;
+            flex: 1;
+            padding: 0 10px;
+        }
+
+        .header-text .ges {
+            font-size: 15px;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .header-text .college-name {
+            font-size: 17px;
+            font-weight: 700;
+            color: #ffffff;
+            margin: 2px 0;
+        }
+
+        .header-text .tagline {
+            font-size: 9px;
+            color: #c8e0ff;
+            line-height: 1.3;
+        }
+
+        .main-content {
+            flex: 1;
+            display: flex;
+            padding: 8px;
+            overflow: hidden;
+            min-height: 0;
+        }
+
+        .chat-section {
+            flex: 1;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            border-radius: 12px;
+            background: #ffffff;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+
+        .chat-header {
+            background: #f4f6f9;
+            padding: 6px 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #e0e6ed;
+            flex-shrink: 0;
+        }
+
+        .chat-header h3 {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1a2a3a;
+        }
+
+        .status {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 10px;
+            color: #2e7d32;
+        }
+
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            background: #2e7d32;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        .header-buttons {
+            display: flex;
+            gap: 6px;
+        }
+
+        .admin-btn, .refresh-btn {
+            background: #2c3e50;
+            color: white;
+            padding: 3px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .admin-btn:hover, .refresh-btn:hover {
+            background: #4a90e2;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .language-selector {
+            display: flex;
+            gap: 6px;
+            padding: 5px 10px;
+            background: #f8f9fc;
+            border-bottom: 1px solid #eef2f7;
+            flex-shrink: 0;
+        }
+
+        .lang-btn {
+            padding: 3px 12px;
+            border: 1px solid #cbd5e1;
+            background: white;
+            color: #2c3e50;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .lang-btn.active {
+            background: #2c3e50;
+            color: white;
+            border-color: #2c3e50;
+        }
+
+        .all-buttons-row {
+            display: flex;
+            gap: 5px;
+            padding: 6px 10px;
+            background: #ffffff;
+            border-bottom: 1px solid #eef2f7;
+            overflow-x: auto;
+            white-space: nowrap;
+            flex-shrink: 0;
+            scrollbar-width: thin;
+        }
+
+        .all-buttons-row::-webkit-scrollbar {
+            height: 3px;
+        }
+
+        .action-btn-small {
+            padding: 3px 8px;
+            background: #f8f9fc;
+            border: 1px solid #e0e6ed;
+            border-radius: 14px;
+            cursor: pointer;
+            font-size: 10px;
+            transition: all 0.3s;
+            font-weight: 500;
+            color: #4a627a;
+            flex-shrink: 0;
+        }
+
+        .action-btn-small:hover {
+            background: #2c3e50;
+            color: white;
+            border-color: #2c3e50;
+        }
+
+        .query-form-btn {
+            margin: 5px 10px;
+            padding: 5px;
+            background: #2c3e50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 600;
+            transition: all 0.3s;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .query-form-btn:hover {
+            background: #1a2a3a;
+            transform: translateY(-1px);
+        }
+
+        #chatBox {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1px 3px;
+            background: #ffffff;
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+            gap: 6px;
+        }
+
+        .message {
+            max-width: 85%;
+            margin: 0;
+            clear: both;
+        }
+
+        .user-message {
+            align-self: flex-end;
+            margin-left: auto;
+        }
+
+        .bot-message {
+            align-self: flex-start;
+            margin-right: auto;
+        }
+
+        .message-content {
+            padding: 9px 18px;
+            border-radius: 14px;
+            word-wrap: break-word;
+            white-space: normal;
+            font-size: 13px;
+            line-height: 1.45;
+        }
+
+        .user-message .message-content {
+            background: #2c3e50;
+            color: white;
+            border-bottom-right-radius: 2px;
+        }
+
+        .bot-message .message-content {
+            background: #f0f2f5;
+            color: #2c3e50;
+            border-bottom-left-radius: 2px;
+        }
+
+        .message-time {
+            font-size: 7px;
+            color: #94a3b8;
+            margin-top: 1px;
+            margin-bottom: 0;
+            text-align: right;
+            line-height: 1;
+        }
+
+        .typing-indicator {
+            align-self: flex-start;
+            padding: 6px 12px;
+            background: #f0f2f5;
+            border-radius: 18px;
+            margin-bottom: 4px;
+            display: flex;
+            gap: 4px;
+            width: fit-content;
+        }
+
+        .typing-dot {
+            width: 6px;
+            height: 6px;
+            background: #94a3b8;
+            border-radius: 50%;
+            animation: typingBounce 1.4s infinite;
+        }
+
+        @keyframes typingBounce {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-3px); }
+        }
+
+        .chat-input-area {
+            padding: 8px 12px;
+            background: white;
+            border-top: 1px solid #eef2f7;
+            flex-shrink: 0;
+        }
+
+        .input-wrapper {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        #message {
+            flex: 1;
+            padding: 10px 15px;
+            border: 1px solid #e0e6ed;
+            border-radius: 25px;
+            font-size: 13px;
+            transition: all 0.3s;
+        }
+
+        #message:focus {
+            outline: none;
+            border-color: #2c3e50;
+            box-shadow: 0 0 0 2px rgba(44,62,80,0.1);
+        }
+
+        .action-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 1px solid #e0e6ed;
+            background: #f8f9fc;
+            color: #2c3e50;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .action-btn:hover {
+            background: #2c3e50;
+            color: white;
+            border-color: #2c3e50;
+        }
+
+        .footer {
+            background: #1a2a3a;
+            color: #b8c7d6;
+            text-align: center;
+            padding: 5px;
+            font-size: 9px;
+            flex-shrink: 0;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            width: 90%;
+            max-width: 400px;
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            animation: modalSlideIn 0.3s ease;
+        }
+
+        @keyframes modalSlideIn {
+            from { transform: translateY(-30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 10px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h3 {
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .modal-body {
+            padding: 15px;
+        }
+
+        .modal-body input,
+        .modal-body select,
+        .modal-body textarea {
+            width: 100%;
+            padding: 7px 10px;
+            margin-bottom: 10px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 12px;
+        }
+
+        .modal-body textarea {
+            resize: none;
+            height: 60px;
+        }
+
+        .submit-query-btn {
+            width: 100%;
+            padding: 8px;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .submit-query-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(30,60,114,0.3);
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #2c3e50;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 6px;
+            transform: translateX(400px);
+            transition: transform 0.3s;
+            z-index: 1001;
+            font-size: 11px;
+        }
+        .toast.show { transform: translateX(0); }
+
+        ::-webkit-scrollbar { width: 4px; height: 4px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+
+        @media (max-width: 550px) {
+            .logo-left, .logo-right { width: 60px; height: 60px; }
+            .header-text .college-name { font-size: 12px; }
+            .header-text .ges { font-size: 11px; }
+            .header-text .tagline { font-size: 7px; }
+            .action-btn-small { font-size: 9px; padding: 2px 5px; }
+            .message-content { font-size: 13px; padding: 6px 10px; }
+            .message { margin-bottom: 3px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ========== CHATBOT ========== -->
+<div id="chatbotApp">
+    <div class="app-container">
+        <div class="header">
+            <div class="header-top">
+                <img src="/Images/Logo1.jpeg" alt="College Logo Left" class="logo-left">
+                <div class="header-text">
+                    <div class="ges">Gokhale Education Society's</div>
+                    <div class="college-name">R. H. Sapat College of Engineering, Management Studies And Research, Nashik-422005</div>
+                    <div class="tagline">AICTE Approved | Accredited by NAAC for 2nd Cycle with B++ Grade (2025-2030) | Affiliated to SPPU, Pune | ISO 9001:2015 Certified</div>
+                </div>
+                <img src="/Images/Logo2.jpeg" alt="College Logo Right" class="logo-right">
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="chat-section">
+                <div class="chat-header">
+                    <h3>Admission Assistant</h3>
+                    <div class="status">
+                        <span class="status-dot"></span>
+                        <span id="botStatus">Online</span>
+                    </div>
+                    <div class="header-buttons">
+                        <button class="refresh-btn" onclick="refreshChat()">Refresh</button>
+                        <button class="admin-btn" onclick="goAdmin()">Admin</button>
+                    </div>
+                </div>
+
+                <div class="language-selector">
+                    <button class="lang-btn" onclick="setLanguage('en')">English</button>
+                    <button class="lang-btn" onclick="setLanguage('hi')">हिन्दी</button>
+                    <button class="lang-btn" onclick="setLanguage('mr')">मराठी</button>
+                </div>
+
+                <div class="all-buttons-row" id="allButtonsRow"></div>
+
+                <button class="query-form-btn" onclick="openQueryModal()">📋 Query Form - Submit Your Question</button>
+
+                <div id="chatBox"></div>
+
+                <div id="typingIndicator" class="typing-indicator" style="display: none;">
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                </div>
+
+                <div class="chat-input-area">
+                    <div class="input-wrapper">
+                        <input type="text" id="message" placeholder="Type your message..." 
+                               onkeypress="if(event.key==='Enter') sendMessage()">
+                        <button class="action-btn" onclick="startVoiceInput()">🎤</button>
+                        <button class="action-btn" onclick="sendMessage()">➤</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>© 2026 R.H. Sapat College | PG Admission Assistance System</p>
+        </div>
+    </div>
+</div>
+
+<!-- Query Modal -->
+<div id="queryModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Admission Query Form</h3>
+            <button class="close-modal" onclick="closeModal('queryModal')">&times;</button>
+        </div>
+        <div class="modal-body">
+            <input type="text" id="queryName" placeholder="Full Name" readonly style="background:#f5f5f5;">
+            <input type="email" id="queryEmail" placeholder="Email Address" readonly style="background:#f5f5f5;">
+            <input type="tel" id="queryMobile" placeholder="Mobile Number" readonly style="background:#f5f5f5;">
+            <select id="queryCourse">
+                <option value="">Select Course</option>
+                <option value="MCA">MCA - Master of Computer Applications</option>
+                <option value="M.E.">M.E. - Master of Engineering</option>
+            </select>
+            <textarea id="queryMessage" placeholder="Your Question..."></textarea>
+            <button class="submit-query-btn" onclick="submitQuery()">Submit Query</button>
+        </div>
+    </div>
+</div>
+
+<div id="toast" class="toast"><span id="toastMessage"></span></div>
+
+<script>
+    let currentLang = 'en';
+    let chatHistory = JSON.parse(localStorage.getItem('chatHistory')) || [];
+    let currentUser = null;
+
+    const allButtonsConfig = {
+        en: [
+            "MCA Fee", "ME Fee", "Admission Dates", "Fee Structure", "Courses", 
+            "Placement", "Scholarship", "Hostel",
+            "Course Recommendation", "Cut-off Tracker", "Campus Tour", "Alumni Connect", 
+            "Document Check", "Merit Calculator", "Study Material", "EMI Calculator", 
+            "Doubt Forum", "Scholarship Finder", "Travel Info", "Stress Buster", "Badges"
+        ],
+        hi: [
+            "MCA फीस", "ME फीस",
+            "कोर्स सुझाव", "कट-ऑफ ट्रैकर", "कैंपस टूर", "एलुमनाई कनेक्ट", 
+            "डॉक्यूमेंट चेक", "मेरिट कैलकुलेटर", "स्टडी मटेरियल", "ईएमआई कैलकुलेटर", 
+            "डाउट फोरम", "स्कॉलरशिप फाइंडर", "यात्रा जानकारी", "स्ट्रेस बस्टर", "बैज"
+        ],
+        mr: [
+            "MCA फी", "ME फी",
+            "कोर्स शिफारस", "कट-ऑफ ट्रॅकर", "कॅम्पस टूर", "माजी विद्यार्थी कनेक्ट", 
+            "कागदपत्र तपासणी", "गुणवत्ता कॅल्क्युलेटर", "अभ्यास साहित्य", "ईएमआय कॅल्क्युलेटर", 
+            "शंका मंच", "शिष्यवृत्ती शोधक", "प्रवास माहिती", "तणाव मुक्ती", "बॅज"
+        ]
+    };
+
+    const translations = {
+        en: { welcome: "Welcome to the PG Admission Portal. I am your admission assistant. How may I help you today?", online: "Online" },
+        hi: { welcome: "पीजी प्रवेश पोर्टल में आपका स्वागत है। मैं आपका प्रवेश सहायक हूं।", online: "ऑनलाइन" },
+        mr: { welcome: "पीजी प्रवेश पोर्टल मध्ये आपले स्वागत आहे. मी तुमचा प्रवेश सहाय्यक आहे.", online: "ऑनलाइन" }
+    };
+
+    const featureResponses = {
+        en: {
+            "Course Recommendation": "Course Recommendation System\n\nMCA:\nDuration: 2 Years\nIntake: 60 seats\nAverage Package: ₹6.5 LPA\n\nM.E. Programs:\nDuration: 2 Years\nIntake: 12 per specialization\nAverage Package: ₹7.5 LPA",
+            "Cut-off Tracker": "Cut-off Tracker 2024\n\nMCA Program:\nOpen: 85-92 percentile\nOBC: 75-82 percentile\nSC/ST: 65-72 percentile\n\nM.E. Program:\nOpen: 80-88 percentile\nOBC: 70-78 percentile\nSC/ST: 60-68 percentile",
+            "Campus Tour": "Campus Tour\n\nMain Academic Block: 4 floors, 50+ classrooms\nComputer Labs: 10 labs, 300+ systems\nCentral Library: 50,000+ books\nHostel: Separate boys & girls\nSports: Indoor & outdoor facilities",
+            "Alumni Connect": "Alumni Success Stories\n\nMCA: Infosys 15, TCS 12, Accenture 8, Microsoft 2\nAverage Package: ₹6.5 LPA\nHighest: ₹12 LPA\n\nM.E.: L&T 10, Tata Motors 8, Mahindra 6\nAverage: ₹7.5 LPA\nHighest: ₹15 LPA",
+            "Document Check": "Document Checklist\n\nMandatory: 10th, 12th, Graduation marksheets, Degree, CET score, Domicile, Photos\nCategory: Caste, Validity, Non-Creamy Layer certificates",
+            "Merit Calculator": "Merit Calculator\n\nMCA: 50% Graduation + 50% CET\nM.E.: 60% Graduation + 40% GATE/CET\n\nScore vs Rank:\n98+ percentile: Rank under 500\n95-98: Rank 500-1500\n90-95: Rank 1500-3000",
+            "Study Material": "Study Material\n\nMCA: MAH-CET Previous Papers, Math Formulas, Reasoning Guide, Mock Tests\nGATE: Subject-wise material, Previous papers, Video lectures",
+            "EMI Calculator": "Education Loan & EMI\n\nMCA Total: ₹1,70,000\nEMI: ₹15,000/month (12 months)\nSBI Loan: 8.5% interest\nWith Scholarship: 25-50% less",
+            "Doubt Forum": "Doubt Forum\n\nQ: Last date for MAH-CET registration?\nA: March 10, 2026\n\nQ: Hostel compulsory?\nA: No, optional\n\nPost your doubt - Type here!",
+            "Scholarship Finder": "Scholarship Finder\n\nOBC: 25% off (Income < ₹8 LPA)\nSC/ST: 50% off\nEBC: Full fee waiver (Income < ₹1 LPA)\nMerit-cum-Means: ₹50,000/year (90%+ in graduation)",
+            "Travel Info": "Nashik Student Guide\n\nWeather: Summer 28-38°C, Winter 12-28°C\nRailway: Nashik Road (5 km)\nAirport: Ozar (20 km)\nPG/Hostel: ₹4,500-5,000/month",
+            "Stress Buster": "Stress Buster\n\nDeep breathing: 4 sec in, hold 4, exhale 4\nStudy: 45 min + 15 min break\nSleep: 8 hours mandatory\nStay positive!",
+            "Badges": "Achievement Badges\n\nCurrent: Bronze Level\nEarn: Daily login (7 days), Quiz 100%, 10 questions asked",
+            "MCA Fee": "MCA Fee Structure 2026-27\n\nTuition Fee: ₹85,000/year\nDevelopment Fee: ₹5,000\nTotal: ₹90,000/year\n\nHostel: ₹40,000/year (optional)",
+            "ME Fee": "ME Fee Structure 2026-27\n\nTuition Fee: ₹95,000/year\nDevelopment Fee: ₹5,000\nTotal: ₹1,00,000/year\n\nHostel: ₹40,000/year (optional)",
+            "Admission Dates": "Important Admission Dates 2026\n\nMAH-MCA CET: April 2026\nGATE 2026: February 2026\nApplication Deadline: March 2026\nCounseling: May-June 2026\nClasses Begin: August 2026",
+            "Fee Structure": "Fee Structure 2026-27\n\nMCA: ₹90,000/year\nME: ₹1,00,000/year\nHostel: ₹40,000/year\nScholarships available for reserved categories",
+            "Courses": "Available Courses\n\nMCA (Master of Computer Applications)\nME Computer Engineering\nME Power Electronics & Drives\nME Digital System\nME Mechanical Engineering Design",
+            "Placement": "Placement Statistics 2024-25\n\nMCA: 55 placed, Highest 12.5 LPA, Average 6.5 LPA\nME: 42 placed, Highest 15 LPA, Average 7.5 LPA\nTop Recruiters: Infosys, TCS, Accenture, L&T",
+            "Scholarship": "Scholarship Information\n\nOBC: 25% off (Income < ₹8 LPA)\nSC/ST: 50% off\nEBC: Full fee waiver (Income < ₹1 LPA)",
+            "Hostel": "Hostel Facilities\n\nSeparate boys and girls hostel\n500+ rooms available\nFee: ₹40,000/year\nWiFi, Mess, Gym, Common room"
+        },
+        hi: {
+            "MCA फीस": "MCA फीस संरचना 2026-27\n\nट्यूशन फीस: ₹85,000/वर्ष\nविकास शुल्क: ₹5,000\nकुल: ₹90,000/वर्ष",
+            "ME फीस": "ME फीस संरचना 2026-27\n\nट्यूशन फीस: ₹95,000/वर्ष\nविकास शुल्क: ₹5,000\nकुल: ₹1,00,000/वर्ष",
+            "कोर्स सुझाव": "कोर्स सुझाव प्रणाली\n\nMCA:\nअवधि: 2 वर्ष\nइंटेक: 60 सीटें\nऔसत पैकेज: ₹6.5 LPA",
+            "कट-ऑफ ट्रैकर": "कट-ऑफ ट्रैकर 2024\n\nMCA: सामान्य 85-92, ओबीसी 75-82, एससी/एसटी 65-72",
+            "कैंपस टूर": "कैंपस टूर\n\nमुख्य भवन, कंप्यूटर लैब, पुस्तकालय, हॉस्टल, खेल सुविधाएं",
+            "एलुमनाई कनेक्ट": "एलुमनाई सफलता\n\nMCA: इन्फोसिस, टीसीएस, एक्सेंचर, माइक्रोसॉफ्ट\nऔसत पैकेज: ₹6.5 LPA",
+            "डॉक्यूमेंट चेक": "दस्तावेज़ चेकलिस्ट\n\n10वीं, 12वीं, स्नातक मार्कशीट, डिग्री, सीईटी स्कोर",
+            "मेरिट कैलकुलेटर": "मेरिट कैलकुलेटर\n\nMCA: 50% स्नातक + 50% सीईटी\nM.E.: 60% स्नातक + 40% गेट/सीईटी",
+            "स्टडी मटेरियल": "अध्ययन सामग्री\n\nMCA: MAH-CET पिछले पेपर, गणित सूत्र, मॉक टेस्ट",
+            "ईएमआई कैलकुलेटर": "ईएमआई कैलकुलेटर\n\nMCA कुल: ₹1,70,000\nईएमआई: ₹15,000/माह (12 महीने)",
+            "डाउट फोरम": "डाउट फोरम\n\nप्रश्न: MAH-CET पंजीकरण की अंतिम तिथि?\nउत्तर: 10 मार्च, 2026",
+            "स्कॉलरशिप फाइंडर": "स्कॉलरशिप फाइंडर\n\nओबीसी: 25% छूट, एससी/एसटी: 50% छूट",
+            "यात्रा जानकारी": "नासिक छात्र गाइड\n\nरेलवे: नासिक रोड (5 किमी)\nहवाई अड्डा: ओजार (20 किमी)",
+            "स्ट्रेस बस्टर": "स्ट्रेस बस्टर\n\nगहरी सांस, 45 मिनट अध्ययन + 15 मिनट ब्रेक",
+            "बैज": "उपलब्धि बैज\n\nवर्तमान: कांस्य स्तर\nदैनिक लॉगिन, क्विज स्कोर से बैज कमाएं"
+        },
+        mr: {
+            "MCA फी": "MCA फी रचना 2026-27\n\nट्यूशन फी: ₹85,000/वर्ष\nविकास शुल्क: ₹5,000\nएकूण: ₹90,000/वर्ष",
+            "ME फी": "ME फी रचना 2026-27\n\nट्यूशन फी: ₹95,000/वर्ष\nविकास शुल्क: ₹5,000\nएकूण: ₹1,00,000/वर्ष",
+            "कोर्स शिफारस": "कोर्स शिफारस प्रणाली\n\nMCA:\nकालावधी: 2 वर्षे\nइंटेक: 60 जागा\nसरासरी पॅकेज: ₹6.5 LPA",
+            "कट-ऑफ ट्रॅकर": "कट-ऑफ ट्रॅकर 2024\n\nMCA: खुला 85-92, ओबीसी 75-82, एससी/एसटी 65-72",
+            "कॅम्पस टूर": "कॅम्पस टूर\n\nमुख्य इमारत, संगणक प्रयोगशाळा, ग्रंथालय, हॉस्टेल",
+            "माजी विद्यार्थी कनेक्ट": "माजी विद्यार्थी यशोगाथा\n\nMCA: इन्फोसिस, टीसीएस, एक्सेंचर\nसरासरी पॅकेज: ₹6.5 LPA",
+            "कागदपत्र तपासणी": "कागदपत्र यादी\n\n10वी, 12वी, पदवी मार्कशीट, पदवी, सीईटी स्कोर",
+            "गुणवत्ता कॅल्क्युलेटर": "गुणवत्ता कॅल्क्युलेटर\n\nMCA: 50% पदवी + 50% सीईटी",
+            "अभ्यास साहित्य": "अभ्यास साहित्य\n\nMCA: MAH-CET मागील पेपर, गणित सूत्र",
+            "ईएमआय कॅल्क्युलेटर": "ईएमआय कॅल्क्युलेटर\n\nMCA एकूण: ₹1,70,000\nईएमआय: ₹15,000/महिना",
+            "शंका मंच": "शंका मंच\n\nप्रश्न: MAH-CET नोंदणीची अंतिम तारीख?\nउत्तर: 10 मार्च, 2026",
+            "शिष्यवृत्ती शोधक": "शिष्यवृत्ती शोधक\n\nओबीसी: 25% सूट, एससी/एसटी: 50% सूट",
+            "प्रवास माहिती": "नाशिक विद्यार्थी मार्गदर्शक\n\nरेल्वे: नाशिक रोड (5 किमी)",
+            "तणाव मुक्ती": "तणाव मुक्ती\n\nखोल श्वास, 45 मिनिटे अभ्यास + 15 मिनिटे ब्रेक",
+            "बॅज": "उपलब्धी बॅज\n\nसध्याची पातळी: कांस्य"
+        }
+    };
+
+    function setLanguage(lang) {
+        currentLang = lang;
+        const t = translations[lang];
+        const buttons = allButtonsConfig[lang];
+        
+        document.getElementById('allButtonsRow').innerHTML = buttons.map(text => 
+            `<button class="action-btn-small" onclick="handleButtonClick('${text.replace(/'/g, "\\'")}')">${text}</button>`
+        ).join('');
+        
+        document.getElementById('botStatus').textContent = t.online;
+        document.getElementById('chatBox').innerHTML = '';
+        addWelcomeMessage();
+        showToast(`Language changed to ${lang.toUpperCase()}`);
+    }
+
+    function handleButtonClick(buttonText) {
+    console.log("Button clicked:", buttonText);
+    console.log("Current user:", currentUser);
+    
+    let response = featureResponses[currentLang]?.[buttonText];
+    if (!response && currentLang !== 'en') {
+        response = featureResponses.en[buttonText];
+    }
+    if (response) {
+        addUserMessage(buttonText);
+        addBotMessage(response);
+        
+        if (currentUser) {
+            console.log("Saving button click for user:", currentUser.fullName);
+            fetch("/chat", {
+                method: "POST",
+                headers: {"Content-Type": "text/plain"},
+                body: buttonText
+            })
+            .then(res => {
+                console.log("Save response status:", res.status);
+                return res.text();
+            })
+            .then(data => {
+                console.log("Save response:", data);
+            })
+            .catch(e => console.log("Error:", e));
+        } else {
+            console.log("No currentUser! Button click not saved.");
+            // Try to reload user
+            loadCurrentUser();
+        }
+    } else {
+        document.getElementById('message').value = buttonText;
+        sendMessage();
+    }
+}
+
+    function addWelcomeMessage() {
+        let chatBox = document.getElementById('chatBox');
+        let time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        chatBox.innerHTML = `
+            <div class="message bot-message">
+                <div class="message-content">
+                    ${translations[currentLang].welcome}
+                    <div class="message-time">${time}</div>
+                </div>
+            </div>
+        `;
+    }
+
+    function addBotMessage(message) {
+        let chatBox = document.getElementById('chatBox');
+        let time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        chatBox.innerHTML += `<div class="message bot-message"><div class="message-content">${message.replace(/\n/g, '<br>')}<div class="message-time">${time}</div></div></div>`;
+        chatBox.scrollTop = chatBox.scrollHeight;
+        saveToHistory(message, false);
+    }
+
+    function addUserMessage(message) {
+        let chatBox = document.getElementById('chatBox');
+        let time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        chatBox.innerHTML += `<div class="message user-message"><div class="message-content">${message}<div class="message-time">${time}</div></div></div>`;
+        chatBox.scrollTop = chatBox.scrollHeight;
+        saveToHistory(message, true);
+    }
+
+    function saveToHistory(message, isUser) {
+        chatHistory.push({ message, isUser, time: new Date().toISOString() });
+        if(chatHistory.length > 30) chatHistory = chatHistory.slice(-30);
+        localStorage.setItem('chatHistory', JSON.stringify(chatHistory));
+    }
+
+    function showTyping() { document.getElementById('typingIndicator').style.display = 'flex'; }
+    function hideTyping() { document.getElementById('typingIndicator').style.display = 'none'; }
+
+    async function sendMessage() {
+    let message = document.getElementById("message").value.trim();
+    if(message === "") { showToast("Please enter a message"); return; }
+    
+    addUserMessage(message);
+    document.getElementById("message").value = "";
+    showTyping();
+    
+    let matchedResponse = null;
+    let allButtons = [...allButtonsConfig.en, ...allButtonsConfig.hi, ...allButtonsConfig.mr];
+    
+    for (let buttonText of allButtons) {
+        if (message.toLowerCase() === buttonText.toLowerCase()) {
+            matchedResponse = featureResponses[currentLang]?.[buttonText];
+            if (!matchedResponse && currentLang !== 'en') {
+                matchedResponse = featureResponses.en[buttonText];
+            }
+            break;
+        }
+    }
+    
+    let botResponse = "";
+    
+    if (matchedResponse) {
+        botResponse = matchedResponse;
+        hideTyping();
+        addBotMessage(botResponse);
+        // Save to database
+        if (currentUser) {
+            try {
+                await fetch("/chat", {
+                    method: "POST",
+                    headers: {"Content-Type": "text/plain"},
+                    body: message
+                });
+                console.log("Button click saved:", message);
+            } catch(e) {
+                console.log("Failed to save:", e);
+            }
+        }
+        return;
+    }
+    
+    try {
+        let response = await fetch("/chat", { 
+            method: "POST", 
+            headers: {"Content-Type": "text/plain"}, 
+            body: message 
+        });
+        botResponse = await response.text();
+        hideTyping();
+        addBotMessage(botResponse);
+        // Chat is already saved by backend
+    } catch(error) {
+        hideTyping();
+        addBotMessage("Unable to connect to server. Please check your connection.");
+    }
+}
+
+    function refreshChat() { 
+        document.getElementById('chatBox').innerHTML = ''; 
+        addWelcomeMessage(); 
+        showToast("Chat refreshed!"); 
+    }
+    
+    function showToast(msg) { 
+        let toast = document.getElementById('toast'); 
+        document.getElementById('toastMessage').textContent = msg; 
+        toast.classList.add('show'); 
+        setTimeout(() => toast.classList.remove('show'), 2000); 
+    }
+    
+    function closeModal(modalId) { 
+        document.getElementById(modalId).style.display = 'none'; 
+    }
+
+    function openQueryModal() {
+        if(!currentUser) {
+            showToast("Please login first!");
+            window.location.href = "/student/signin";
+            return;
+        }
+        document.getElementById('queryName').value = currentUser.fullName;
+        document.getElementById('queryEmail').value = currentUser.email;
+        document.getElementById('queryMobile').value = currentUser.mobile;
+        document.getElementById('queryModal').style.display = 'flex'; 
+    }
+    
+    async function submitQuery() {
+        let name = document.getElementById('queryName').value.trim();
+        let email = document.getElementById('queryEmail').value.trim();
+        let mobile = document.getElementById('queryMobile').value.trim();
+        let course = document.getElementById('queryCourse').value;
+        let message = document.getElementById('queryMessage').value.trim();
+        
+        if(!name) { showToast("Please enter your full name"); return; }
+        if(!email || !email.includes('@') || !email.includes('.')) { showToast("Please enter a valid email address"); return; }
+        if(!mobile || mobile.length !== 10 || !/^\d{10}$/.test(mobile)) { showToast("Mobile number must be exactly 10 digits"); return; }
+        if(!course) { showToast("Please select a course"); return; }
+        if(!message) { showToast("Please enter your question"); return; }
+        
+        try {
+            let response = await fetch("/enquiries", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({ fullName: name, email, mobile, course, message })
+            });
+            
+            if(response.ok) {
+                showToast("Query submitted successfully!");
+                closeModal('queryModal');
+                document.getElementById('queryCourse').value = '';
+                document.getElementById('queryMessage').value = '';
+                addBotMessage(`Thank you ${name}! Your query regarding ${course} has been submitted. We'll contact you within 24 hours.`);
+            } else {
+                showToast("Error submitting query. Please try again.");
+            }
+        } catch(error) {
+            showToast("Error submitting query. Please try again.");
+        }
+    }
+
+    function goAdmin() { 
+        window.location.href = "/auth/signin"; 
+    }
+
+    function startVoiceInput() {
+        if ('webkitSpeechRecognition' in window) {
+            let recognition = new webkitSpeechRecognition();
+            recognition.lang = 'en-US';
+            recognition.onstart = () => showToast("Listening...");
+            recognition.onresult = (e) => {
+                document.getElementById('message').value = e.results[0][0].transcript;
+                sendMessage();
+            };
+            recognition.start();
+        } else { showToast("Voice input not supported"); }
+    }
+
+    // Load user from session
+    async function loadCurrentUser() {
+    try {
+        let response = await fetch("/api/user/check-session");
+        console.log("Check session response status:", response.status);
+        if(response.ok) {
+            let user = await response.json();
+            console.log("User from session:", user);
+            if(user) {
+                currentUser = user;
+                console.log("Current user set to:", currentUser.fullName);
+                setLanguage('en');
+                showToast(`Welcome ${user.fullName}!`);
+            } else {
+                console.log("No user in session");
+            }
+        } else {
+            console.log("Session check failed");
+        }
+    } catch(e) {
+        console.log("Error loading user:", e);
+    }
+}
+    
+    loadCurrentUser();
+    setLanguage('en');
+</script>
+</body>
+</html>

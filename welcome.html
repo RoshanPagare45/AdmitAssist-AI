@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome - PG Admission Portal</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        /* ONLY PAGE BACKGROUND CHANGED - BOX REMAINS SAME */
+        body {
+            background: #e0e7ff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .welcome-container {
+            width: 100%;
+            max-width: 450px;
+            padding: 20px;
+        }
+        .welcome-card {
+            background: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(18px);
+            border-radius: 28px;
+            padding: 50px 40px;
+            border: 1px solid rgba(255,255,255,0.08);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.45);
+            text-align: center;
+        }
+        .logo h1 {
+            color: white;
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        .logo p {
+            color: #cbd5e1;
+            font-size: 13px;
+            margin-bottom: 20px;
+        }
+        .logo hr {
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+            margin: 20px auto;
+            border: none;
+            border-radius: 2px;
+        }
+        .btn-group {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin: 35px 0 25px;
+        }
+        .btn-signin {
+            padding: 14px;
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: white;
+            border: none;
+            border-radius: 40px;
+            font-size: 16px;
+            font-weight: 600;
+            text-decoration: none;
+            display: block;
+            text-align: center;
+            transition: all 0.25s;
+        }
+        .btn-signin:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(59,130,246,0.4);
+        }
+        .btn-signup {
+            padding: 14px;
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.3);
+            color: white;
+            border-radius: 40px;
+            font-size: 16px;
+            font-weight: 600;
+            text-decoration: none;
+            display: block;
+            text-align: center;
+            transition: all 0.25s;
+        }
+        .btn-signup:hover {
+            background: rgba(255,255,255,0.1);
+            border-color: #3b82f6;
+        }
+        .admin-link {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        .admin-link a {
+            color: #94a3b8;
+            text-decoration: none;
+            font-size: 13px;
+        }
+        .admin-link a:hover {
+            color: #60a5fa;
+        }
+        .footer {
+            margin-top: 20px;
+            color: #64748b;
+            font-size: 11px;
+        }
+    </style>
+</head>
+<body>
+    <div class="welcome-container">
+        <div class="welcome-card">
+            <div class="logo">
+                <h1>PG Admission Portal</h1>
+                <p>R. H. Sapat College, Nashik</p>
+                <hr>
+            </div>
+            <div class="btn-group">
+                <a href="/student/signin" class="btn-signin">Sign In</a>
+                <a href="/student/signup" class="btn-signup">Register</a>
+            </div>
+            <div class="admin-link">
+                <a href="/auth/signin">Administrator Login →</a>
+            </div>
+            <div class="footer">
+                <p>© 2026 R.H. Sapat College | Admission Assistance System</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

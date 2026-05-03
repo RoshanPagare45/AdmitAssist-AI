@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Teacher Registration - R.H. Sapat College</title>
+    <style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* FIXED SCREEN LAYOUT */
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #e0e7ff;
+}
+
+/* APP LAYOUT */
+.app-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+/* HEADER - Dark Glass */
+.header {
+    background: rgba(15, 23, 42, 0.9);
+    backdrop-filter: blur(12px);
+    color: white;
+    text-align: center;
+    padding: 12px 20px;
+    border-bottom: 1px solid rgba(59,130,246,0.2);
+    flex-shrink: 0;
+}
+
+.header h1 {
+    font-size: 16px;
+    line-height: 1.4;
+    font-weight: 600;
+    color: white;
+}
+
+.subtitle {
+    margin-top: 4px;
+    font-size: 12px;
+    color: #94a3b8;
+}
+
+/* MAIN SCROLL AREA */
+.main-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 15px;
+}
+
+/* SMOOTH SCROLL */
+.main-content::-webkit-scrollbar {
+    width: 6px;
+}
+.main-content::-webkit-scrollbar-track {
+    background: rgba(255,255,255,0.05);
+    border-radius: 4px;
+}
+.main-content::-webkit-scrollbar-thumb {
+    background: #4a90e2;
+    border-radius: 4px;
+}
+
+/* CARD - Dark Glass */
+.registration-card {
+    max-width: 700px;
+    margin: 0 auto;
+    background: rgba(15, 23, 42, 0.9);
+    backdrop-filter: blur(18px);
+    border-radius: 24px;
+    padding: 25px;
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.45);
+}
+
+/* HEADER */
+.card-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.card-header h2 {
+    color: white;
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.card-header hr {
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+    margin: 10px auto;
+    border: none;
+    border-radius: 2px;
+}
+
+/* ALERTS */
+.alert {
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    font-size: 13px;
+}
+
+.alert-success {
+    background: rgba(34, 197, 94, 0.15);
+    border: 1px solid rgba(34, 197, 94, 0.3);
+    color: #4ade80;
+}
+
+.alert-error {
+    background: rgba(239, 68, 68, 0.15);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    color: #f87171;
+}
+
+/* INFO BOX */
+.info-box {
+    background: rgba(59,130,246,0.08);
+    border-left: 3px solid #3b82f6;
+    padding: 10px 12px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    font-size: 13px;
+    color: #cbd5e1;
+}
+
+.info-box strong {
+    color: #60a5fa;
+}
+
+/* GRID */
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.form-group {
+    margin-bottom: 8px;
+}
+
+.form-group.full-width {
+    grid-column: span 2;
+}
+
+/* LABELS */
+.form-group label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #94a3b8;
+    margin-bottom: 4px;
+    display: block;
+}
+
+.required {
+    color: #60a5fa;
+}
+
+/* INPUTS */
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 9px 10px;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 7px;
+    font-size: 13px;
+    background: rgba(255,255,255,0.03);
+    color: white;
+}
+
+.form-group input::placeholder,
+.form-group select {
+    color: rgba(255,255,255,0.45);
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: rgba(59,130,246,0.5);
+    background: rgba(255,255,255,0.06);
+    box-shadow: 0 0 0 2px rgba(59,130,246,0.15);
+}
+
+.form-group select option {
+    background: #1e293b;
+    color: white;
+}
+
+/* HINT */
+.form-hint {
+    font-size: 10px;
+    color: #64748b;
+}
+
+/* OTP */
+.otp-input-group {
+    display: flex;
+    gap: 8px;
+}
+
+.otp-input-group input {
+    flex: 2;
+}
+
+/* BUTTONS */
+.otp-btn,
+.verify-btn {
+    padding: 9px;
+    border: none;
+    border-radius: 7px;
+    color: white;
+    cursor: pointer;
+    font-size: 12px;
+    transition: all 0.25s;
+}
+
+.otp-btn {
+    background: rgba(59,130,246,0.8);
+}
+.otp-btn:hover {
+    background: rgba(59,130,246,1);
+    transform: translateY(-1px);
+}
+
+.verify-btn {
+    background: rgba(34,197,94,0.8);
+}
+.verify-btn:hover {
+    background: rgba(34,197,94,1);
+    transform: translateY(-1px);
+}
+
+/* TIMER + STATUS */
+.otp-timer {
+    font-size: 11px;
+    color: #94a3b8;
+}
+
+.otp-status {
+    font-size: 11px;
+}
+.otp-status.success { color: #4ade80; }
+.otp-status.error { color: #f87171; }
+
+/* PASSWORD MATCH */
+.password-match {
+    font-size: 11px;
+}
+.password-match.valid { color: #4ade80; }
+.password-match.invalid { color: #f87171; }
+
+/* MAIN BUTTON */
+.golden-btn {
+    width: 100%;
+    padding: 10px;
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    color: white;
+    border: none;
+    border-radius: 7px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 15px;
+    transition: all 0.25s;
+}
+
+.golden-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 5px 15px rgba(59,130,246,0.3);
+}
+
+.golden-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* LINKS */
+.login-link,
+.back-link {
+    text-align: center;
+    margin-top: 12px;
+    font-size: 13px;
+}
+
+.login-link a,
+.back-link a {
+    color: #94a3b8;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.login-link a:hover,
+.back-link a:hover {
+    color: #60a5fa;
+}
+
+/* FOOTER FIXED */
+.footer {
+    background: rgba(15, 23, 42, 0.9);
+    backdrop-filter: blur(12px);
+    color: #64748b;
+    text-align: center;
+    padding: 8px;
+    font-size: 11px;
+    flex-shrink: 0;
+    border-top: 1px solid rgba(255,255,255,0.05);
+}
+
+/* MOBILE */
+@media (max-width: 640px) {
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .form-group.full-width {
+        grid-column: span 1;
+    }
+
+    .otp-input-group {
+        flex-direction: column;
+    }
+}
+</style>
+</head>
+<body>
+    <div class="app-container">
+        <div class="header">
+            <h1>Gokhale Education Society's
+                R. H. Sapat College of Engineering, Management Studies And Research</h1>
+            <div class="subtitle">Faculty Registration with Email Verification</div>
+        </div>
+
+        <div class="main-content">
+            <div class="registration-card">
+                <div class="card-header">
+                    <h2>Teacher Registration</h2>
+                    <hr>
+                </div>
+
+                <!-- Success/Error Messages -->
+                <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+                <div th:if="${error}" class="alert alert-error" th:text="${error}"></div>
+
+                <!-- Information Box -->
+                <div class="info-box">
+                    <strong>Email Verification Required</strong><br>
+                    • Enter your personal email to receive OTP<br>
+                    • OTP valid for 5 minutes<br>
+                    • Verify email before completing registration<br>
+                    • Use valid Teacher ID from college database
+                </div>
+
+                <form action="/auth/signup" method="post" onsubmit="return validateFinalSubmit()">
+                    <div class="form-grid">
+                        <!-- Full Name -->
+                        <div class="form-group full-width">
+                            <label>Full Name <span class="required">*</span></label>
+                            <input type="text" name="fullName" id="fullName" placeholder="As per college records" required>
+                        </div>
+
+                        <!-- Personal Email (for OTP) -->
+                        <div class="form-group full-width">
+                            <label>Personal Email <span class="required">*</span></label>
+                            <div class="otp-input-group">
+                                <input type="email" id="personalEmail" name="personalEmail" 
+                                       placeholder="your.email@gmail.com" required>
+                                <button type="button" class="otp-btn" onclick="sendOTP()" id="sendOtpBtn">Send OTP</button>
+                            </div>
+                            <span class="form-hint">OTP will be sent to this email for verification</span>
+                        </div>
+
+                        <!-- OTP Verification -->
+                        <div class="form-group full-width" id="otpSection" style="display: none;">
+                            <label>Enter OTP <span class="required">*</span></label>
+                            <div class="otp-input-group">
+                                <input type="text" id="otpCode" placeholder="Enter 6-digit OTP" maxlength="6">
+                                <button type="button" class="verify-btn" onclick="verifyOTP()" id="verifyOtpBtn">Verify</button>
+                            </div>
+                            <div id="otpTimer" class="otp-timer"></div>
+                            <div id="otpStatus" class="otp-status"></div>
+                        </div>
+
+                        <!-- College Email -->
+                        <div class="form-group full-width">
+                            <label>College Email <span class="required">*</span></label>
+                            <input type="email" name="collegeEmail" id="collegeEmail" 
+                                   placeholder="teacher@rhsapat.edu.in" 
+                                   pattern=".+@rhsapat\.edu\.in" 
+                                   title="Must be @rhsapat.edu.in email" required>
+                            <span class="form-hint">Your official college email (must match database)</span>
+                        </div>
+
+                        <!-- Teacher ID -->
+                        <div class="form-group">
+                            <label>Teacher ID <span class="required">*</span></label>
+                            <input type="text" name="teacherId" id="teacherId" 
+                                   placeholder="TCH001, FAC001, PROF001" 
+                                   pattern="[A-Z]{3,5}[0-9]{3}" 
+                                   title="Format: 3 to 5 letters followed by 3 numbers" required>
+                            <span class="form-hint">Examples: TCH001, FAC001, PROF001</span>
+                        </div>
+
+                        <!-- Mobile -->
+                        <div class="form-group">
+                            <label>Mobile <span class="required">*</span></label>
+                            <input type="tel" name="mobile" id="mobile" 
+                                   placeholder="9876543210" 
+                                   pattern="[0-9]{10}" maxlength="10" required>
+                            <span class="form-hint">10 digit mobile number</span>
+                        </div>
+
+                        <!-- Department -->
+                        <div class="form-group">
+                            <label>Department <span class="required">*</span></label>
+                            <select name="department" required>
+                                <option value="">Select Department</option>
+                                <option value="MCA">MCA - Master of Computer Applications</option>
+                                <option value="ME">ME - Master of Engineering</option>
+                                <option value="Computer">Computer Engineering</option>
+                                <option value="IT">Information Technology</option>
+                                <option value="Civil">Civil Engineering</option>
+                                <option value="Electrical">Electrical Engineering</option>
+                                <option value="Mechanical">Mechanical Engineering</option>
+                            </select>
+                        </div>
+
+                        <!-- Designation -->
+                        <div class="form-group">
+                            <label>Designation <span class="required">*</span></label>
+                            <select name="designation" required>
+                                <option value="">Select Designation</option>
+                                <option value="Professor">Professor</option>
+                                <option value="Associate Professor">Associate Professor</option>
+                                <option value="Assistant Professor">Assistant Professor</option>
+                                <option value="HOD">Head of Department (HOD)</option>
+                                <option value="Dean">Dean</option>
+                                <option value="Lecturer">Lecturer</option>
+                            </select>
+                        </div>
+
+                        <!-- Password -->
+                        <div class="form-group">
+                            <label>Password <span class="required">*</span></label>
+                            <input type="password" name="password" id="password" 
+                                   placeholder="Min 6 characters" minlength="6" required>
+                        </div>
+
+                        <!-- Confirm Password -->
+                        <div class="form-group">
+                            <label>Confirm Password <span class="required">*</span></label>
+                            <input type="password" name="confirmPassword" id="confirmPassword" 
+                                   placeholder="Re-enter password" minlength="6" required>
+                        </div>
+
+                        <!-- Password Match Message -->
+                        <div class="form-group full-width">
+                            <div class="password-match" id="passwordMatchMsg"></div>
+                        </div>
+
+                        <!-- Security Question -->
+                        <div class="form-group">
+                            <label>Security Question <span class="required">*</span></label>
+                            <select name="securityQuestion" required>
+                                <option value="">Select a question</option>
+                                <option value="pet">What was your first pet's name?</option>
+                                <option value="school">What was the name of your first school?</option>
+                                <option value="mother">What is your mother's maiden name?</option>
+                                <option value="city">In which city were you born?</option>
+                                <option value="book">What is your favorite book?</option>
+                                <option value="movie">What is your favorite movie?</option>
+                            </select>
+                        </div>
+
+                        <!-- Security Answer -->
+                        <div class="form-group">
+                            <label>Security Answer <span class="required">*</span></label>
+                            <input type="text" name="securityAnswer" placeholder="Your answer" required>
+                            <span class="form-hint">Used for password recovery</span>
+                        </div>
+                    </div>
+
+                    <!-- Hidden field for email verification -->
+                    <input type="hidden" name="emailVerified" id="emailVerified" value="false">
+
+                    <button type="submit" class="golden-btn" id="submitBtn" disabled>Complete Registration</button>
+
+                    <div class="login-link">
+                        Already registered? <a href="/auth/signin">Sign in to your account</a>
+                    </div>
+
+                    <div class="back-link">
+                        <a href="/">← Return to Main Portal</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>© 2026 R.H. Sapat College of Engineering | Email Verified Registration</p>
+        </div>
+    </div>
+
+    <script>
+        let timerInterval;
+        let timeLeft = 300;
+
+        function sendOTP() {
+            let email = document.getElementById('personalEmail').value;
+            
+            if (!email || !email.includes('@')) {
+                alert('Please enter a valid email address');
+                return;
+            }
+
+            let sendBtn = document.getElementById('sendOtpBtn');
+            sendBtn.disabled = true;
+            sendBtn.textContent = 'Sending...';
+
+            fetch('/api/otp/send?email=' + encodeURIComponent(email), {
+                method: 'POST'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    document.getElementById('otpSection').style.display = 'block';
+                    startTimer(300);
+                    let status = document.getElementById('otpStatus');
+                    status.textContent = 'OTP sent successfully! Check your email.';
+                    status.className = 'otp-status success';
+                    sendBtn.textContent = 'Resend OTP';
+                } else {
+                    alert('Failed to send OTP: ' + data.message);
+                    sendBtn.disabled = false;
+                    sendBtn.textContent = 'Send OTP';
+                }
+            })
+            .catch(error => {
+                alert('Error sending OTP. Please try again.');
+                sendBtn.disabled = false;
+                sendBtn.textContent = 'Send OTP';
+            });
+        }
+
+        function verifyOTP() {
+            let email = document.getElementById('personalEmail').value;
+            let otp = document.getElementById('otpCode').value;
+            
+            if (!otp || otp.length !== 6) {
+                alert('Please enter 6-digit OTP');
+                return;
+            }
+
+            let verifyBtn = document.getElementById('verifyOtpBtn');
+            verifyBtn.disabled = true;
+            verifyBtn.textContent = 'Verifying...';
+
+            fetch('/api/otp/verify?email=' + encodeURIComponent(email) + '&otp=' + otp, {
+                method: 'POST'
+            })
+            .then(response => response.json())
+            .then(data => {
+                let status = document.getElementById('otpStatus');
+                
+                if (data.status === 'success') {
+                    status.textContent = 'Email verified successfully!';
+                    status.className = 'otp-status success';
+                    document.getElementById('submitBtn').disabled = false;
+                    document.getElementById('emailVerified').value = 'true';
+                    document.getElementById('otpCode').disabled = true;
+                    document.getElementById('verifyOtpBtn').disabled = true;
+                    document.getElementById('sendOtpBtn').disabled = true;
+                    clearInterval(timerInterval);
+                    document.getElementById('otpTimer').textContent = 'Email verified';
+                } else {
+                    status.textContent = data.message;
+                    status.className = 'otp-status error';
+                    verifyBtn.disabled = false;
+                    verifyBtn.textContent = 'Verify';
+                }
+            })
+            .catch(error => {
+                alert('Error verifying OTP');
+                verifyBtn.disabled = false;
+                verifyBtn.textContent = 'Verify';
+            });
+        }
+
+        function startTimer(seconds) {
+            timeLeft = seconds;
+            let timerDisplay = document.getElementById('otpTimer');
+            
+            clearInterval(timerInterval);
+            
+            timerInterval = setInterval(() => {
+                let minutes = Math.floor(timeLeft / 60);
+                let seconds = timeLeft % 60;
+                
+                timerDisplay.textContent = `OTP expires in: ${minutes}:${seconds.toString().padStart(2, '0')}`;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    timerDisplay.textContent = 'OTP expired. Please request again.';
+                    document.getElementById('sendOtpBtn').disabled = false;
+                }
+                
+                timeLeft--;
+            }, 1000);
+        }
+
+        function validateFinalSubmit() {
+            let password = document.getElementById('password').value;
+            let confirm = document.getElementById('confirmPassword').value;
+            let mobile = document.getElementById('mobile').value;
+            let teacherId = document.getElementById('teacherId').value;
+            let emailVerified = document.getElementById('emailVerified').value;
+
+            if (!emailVerified || emailVerified !== 'true') {
+                alert('Please verify your email first!');
+                return false;
+            }
+
+            if (password.length < 6) {
+                alert('Password must be at least 6 characters!');
+                return false;
+            }
+
+            if (password !== confirm) {
+                alert('Passwords do not match!');
+                return false;
+            }
+
+            if (!/^[0-9]{10}$/.test(mobile)) {
+                alert('Please enter valid 10-digit mobile number!');
+                return false;
+            }
+
+            if (!/^[A-Z]{3,5}[0-9]{3}$/.test(teacherId)) {
+                alert('Teacher ID must be in format: 3 to 5 letters followed by 3 numbers\n\nExamples: TCH001, FAC001, PROF001');
+                return false;
+            }
+
+            return true;
+        }
+
+        document.getElementById('teacherId').addEventListener('input', function() {
+            this.value = this.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+        });
+
+        document.getElementById('collegeEmail').addEventListener('input', function() {
+            this.value = this.value.toLowerCase();
+        });
+
+        document.getElementById('mobile').addEventListener('input', function() {
+            this.value = this.value.replace(/[^0-9]/g, '');
+        });
+
+        document.getElementById('confirmPassword').addEventListener('input', function() {
+            let password = document.getElementById('password').value;
+            let confirm = this.value;
+            let msg = document.getElementById('passwordMatchMsg');
+            
+            if (confirm.length > 0) {
+                if (password === confirm) {
+                    msg.innerHTML = 'Passwords match';
+                    msg.className = 'password-match valid';
+                } else {
+                    msg.innerHTML = 'Passwords do not match';
+                    msg.className = 'password-match invalid';
+                }
+            } else {
+                msg.innerHTML = '';
+            }
+        });
+    </script>
+</body>
+</html>
